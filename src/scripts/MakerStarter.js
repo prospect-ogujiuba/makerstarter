@@ -1,4 +1,4 @@
-class MainScript {
+class MakerStarter {
   constructor() {
     this.init();
   }
@@ -8,4 +8,4 @@ class MainScript {
   }
 }
 
-export default MainScript;
+export default MakerStarter;

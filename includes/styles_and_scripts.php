@@ -30,10 +30,10 @@ function makerstarter_admin_enqueue()
 {
   global $script_version, $style_version;
 
-  wp_register_script('makerstarter-admin-scripts', get_stylesheet_directory_uri() . '/assets/js/index-wp-admin.js', [], $script_version, true);
+  wp_register_script('makerstarter-admin-scripts', get_stylesheet_directory_uri() . '/assets/admin/index-wp-admin.js', [], $script_version, true);
   wp_enqueue_script('makerstarter-admin-scripts');
 
-  wp_register_style('makerstarter-admin-styles', get_stylesheet_directory_uri() . '/assets/css/styles-wp-admin.css', [], $style_version, 'all');
+  wp_register_style('makerstarter-admin-styles', get_stylesheet_directory_uri() . '/assets/admin/styles-wp-admin.css', [], $style_version, 'all');
   wp_enqueue_style('makerstarter-admin-styles');
 }
 

@@ -13,16 +13,11 @@ function my_theme_register_required_plugins()
 	 * If the source is NOT from the .org repo, then source is also required.
 	 */
   $plugins = [
-    [
-      'name'     => 'The SEO Framework: Fast, Automated, Effortless',
-      'slug'     => 'autodescription',
-      'required' => false,
-    ],
-    [
-      'name'     => 'Advanced Custom Fields Pro',
-      'slug'     => 'advanced-custom-fields-pro',
-      'required' => false,
-    ],
+    // [
+    //   'name'     => 'Plugin Name',
+    //   'slug'     => 'plugin-slug',
+    //   'required' => false,
+    // ],
   ];
 
   /*
