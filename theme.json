@@ -3,11 +3,23 @@
   "version": 3,
   "settings": {
     "appearanceTools": true,
-    "border": {},
+    "border": {
+      "color": true,
+      "radius": true,
+      "style": true,
+      "width": true
+    },
     "color": {
+      "background": true,
+      "custom": true,
       "customDuotone": true,
+      "customGradient": true,
+      "defaultDuotone": true,
+      "defaultGradients": true,
+      "defaultPalette": true,
       "duotone": [],
       "gradients": [],
+      "link": true,
       "palette": [
         {
           "color": "#f9fafb",
@@ -484,12 +496,19 @@
           "name": "Pink 900",
           "slug": "pink-900"
         }
-      ]
+      ],
+      "button": true,
+      "caption": true,
+      "heading": true,
+      "text": true
     },
     "custom": {},
-    "dimensions": {},
+    "dimensions": { "aspectRatio": true, "minHeight": true },
     "layout": {
-      "contentSize": "800px"
+      "allowCustomContentAndWideSize": true,
+      "allowEditing": true,
+      "contentSize": "800px",
+      "wideSize": "1100"
     },
     "position": {},
     "shadow": {},
