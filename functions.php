@@ -7,12 +7,19 @@
  */
 
 // <----- Includes ----->
-include(get_theme_file_path('/includes/carbon_fields.php'));
-include(get_theme_file_path('/includes/custom_login_screen.php'));
-include(get_theme_file_path('/includes/gravity_forms_functions.php'));
-include(get_theme_file_path('/includes/query_adjustments.php'));
-include(get_theme_file_path('/includes/registration_form_message.php'));
-include(get_theme_file_path('/includes/required_plugins.php'));
-include(get_theme_file_path('/includes/remove_archive_prefixes.php'));
-include(get_theme_file_path('/includes/styles_and_scripts.php'));
-include(get_theme_file_path('/includes/maker_starter_setup.php'));
+$includes = [
+    // 'carbon_fields',
+    'custom_login_screen',
+    'gravity_forms_functions',
+    'query_adjustments',
+    'registration_form_message',
+    'required_plugins',
+    'remove_archive_prefixes',
+    'styles_and_scripts',
+    'maker_starter_setup',
+    'menu_config'
+];
+
+foreach ($includes as $include) {
+    include(get_theme_file_path('/includes/' . $include . '.php'));
+}
