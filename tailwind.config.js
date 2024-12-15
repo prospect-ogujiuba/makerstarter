@@ -134,21 +134,11 @@ module.exports = {
   content: [
     './*.{html,js,cjs,php}',
     './src/**/*.{html,js,cjs,php}',
-    './template-parts/**/*.{html,js,cjs,php}',
-  ],
-  safelist: [
-    'lg:top-10',
-    'lg:top-2',
-    'lg:top-3/4',
-    'lg:top-4/5',
-    'lg:-left-10',
-    'lg:-right-10',
-    'lg:-right-16',
+    './templates/**/*.{html,js,cjs,php}',
   ],
   theme: {
     extend: {
-      colors: theme_starter_colors, //<-- Use the theme_starter_colors for colors
-      // fontFamily: theme_starter_fonts, //<-- Use the theme_starter_fonts for fonts,
+   
     },
   },
   plugins: [
