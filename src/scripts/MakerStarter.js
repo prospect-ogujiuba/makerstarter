@@ -4,7 +4,7 @@ class MakerStarter {
   }
 
   init() {
-    console.log("MakerStarter Main Script initialized");
+    console.log("MakerStarter Theme Script initialized");
   }
 }
 

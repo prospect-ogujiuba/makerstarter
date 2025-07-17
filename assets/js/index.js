@@ -17,7 +17,7 @@ class MakerStarter {
     this.init();
   }
   init() {
-    console.log("MakerStarter Main Script initialized");
+    console.log("MakerStarter Theme Script initialized");
   }
 }
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (MakerStarter);
