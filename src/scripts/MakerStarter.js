@@ -4,7 +4,7 @@ class MakerStarter {
   }
 
   init() {
-    console.log("Maker Starter Main Script initialized");
+    console.log("MakerStarter Main Script initialized");
   }
 }
 

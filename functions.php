@@ -9,9 +9,10 @@
 $includes = [
     // 'carbon_fields',
     'maker_starter_setup',
+    'variables',
     'menu_config',
     'required_plugins',
-    'styles_and_scripts',
+    'enqueue_assets',
 ];
 
 foreach ($includes as $include) {

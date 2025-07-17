@@ -17,7 +17,7 @@ class MakerStarter {
     this.init();
   }
   init() {
-    console.log("Maker Starter Main Script initialized");
+    console.log("MakerStarter Main Script initialized");
   }
 }
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (MakerStarter);
@@ -81,7 +81,7 @@ class MakerStarter {
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
+// This entry needs to be wrapped in an IIFE because it needs to be isolated against other modules in the chunk.
 (() => {
 /*!**********************!*\
   !*** ./src/index.js ***!
