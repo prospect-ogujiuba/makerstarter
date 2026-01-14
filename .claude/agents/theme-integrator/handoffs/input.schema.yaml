@@ -1,0 +1,92 @@
+# theme_needs_handoff Schema
+# Input from fse-template-builder to theme-integrator
+
+version: "1.0"
+description: Theme requirements for FSE template integration
+
+schema:
+  handoff:
+    type: object
+    required: [metadata, schema]
+    properties:
+      metadata:
+        type: object
+        properties:
+          from_stage:
+            type: string
+            const: "template-building"
+          to_stage:
+            type: string
+            const: "theme-integration"
+          template_file:
+            type: string
+            description: Path to template that triggered theme needs
+
+      schema:
+        type: object
+        properties:
+          new_colors_needed:
+            type: array
+            items:
+              type: object
+              required: [name, slug, value]
+              properties:
+                name:
+                  type: string
+                  description: Human-readable color name
+                slug:
+                  type: string
+                  pattern: "^[a-z0-9-]+$"
+                  description: kebab-case slug for CSS variable
+                value:
+                  type: string
+                  description: CSS color value (hex, rgb, etc.)
+                rationale:
+                  type: string
+                  description: Why this color was needed
+
+          new_typography_needed:
+            type: array
+            items:
+              type: object
+              required: [name, slug, fontFamily]
+              properties:
+                name:
+                  type: string
+                slug:
+                  type: string
+                  pattern: "^[a-z0-9-]+$"
+                fontFamily:
+                  type: string
+                  description: CSS font-family value
+                rationale:
+                  type: string
+
+          custom_template_registration:
+            type: boolean
+            default: false
+            description: Whether template needs explicit registration
+
+      decisions:
+        type: array
+        items:
+          type: object
+          properties:
+            decision:
+              type: string
+            rationale:
+              type: string
+            alternatives:
+              type: array
+              items:
+                type: string
+            impact:
+              type: array
+              items:
+                type: string
+
+invocation_condition: |
+  This agent is ONLY invoked when at least one is true:
+  - new_colors_needed has entries
+  - new_typography_needed has entries
+  - custom_template_registration is true
