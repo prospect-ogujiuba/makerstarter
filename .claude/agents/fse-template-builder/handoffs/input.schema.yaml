@@ -1,0 +1,51 @@
+# Input Schema: requirements_handoff
+# Consumed from: maker-template skill or upstream planning
+
+schema:
+  template_name:
+    type: string
+    required: true
+    description: Template filename following FSE hierarchy
+    examples:
+      - "page-services.html"
+      - "front-page.html"
+      - "page-about.html"
+
+  purpose:
+    type: string
+    required: true
+    description: Template purpose guiding layout decisions
+    examples:
+      - "Services listing page"
+      - "Company about page"
+      - "Contact form page"
+
+  sections:
+    type: array
+    required: true
+    items: string
+    description: Page sections to compose
+    examples:
+      - ["header", "hero", "content", "cta", "footer"]
+      - ["header", "page-header", "form", "sidebar", "footer"]
+
+  makerblocks:
+    type: array
+    required: true
+    items: string
+    description: Specific blocks to include (without namespace)
+    examples:
+      - ["services", "cta-section"]
+      - ["contact-form", "contact-info", "location-map"]
+
+  custom_attributes:
+    type: object
+    required: false
+    default: {}
+    description: Override default block attributes
+    example:
+      page-header:
+        heading: "Our Services"
+        showStats: true
+      cta-section:
+        buttonText: "Get Started"

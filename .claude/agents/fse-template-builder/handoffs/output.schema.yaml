@@ -1,0 +1,79 @@
+# Output Schema: theme_needs_handoff
+# Produced for: theme-integrator agent
+# Condition: Only produced if theme.json updates are required
+
+handoff:
+  metadata:
+    from_stage: "template-building"
+    to_stage: "theme-integration"
+
+schema:
+  template_file:
+    type: string
+    required: true
+    description: Path to created template file
+    example: "templates/page-services.html"
+
+  new_colors_needed:
+    type: array
+    required: true
+    items:
+      name:
+        type: string
+        description: Human-readable color name
+      slug:
+        type: string
+        description: CSS slug for color
+      value:
+        type: string
+        description: Hex color value
+      rationale:
+        type: string
+        description: Why this color is needed
+    example:
+      - name: "Service Accent"
+        slug: "service-accent"
+        value: "#3B82F6"
+        rationale: "Visual distinction for services page"
+
+  new_typography_needed:
+    type: array
+    required: true
+    items:
+      name:
+        type: string
+      fontFamily:
+        type: string
+      rationale:
+        type: string
+    default: []
+
+  custom_template_registration:
+    type: boolean
+    required: true
+    default: false
+    description: Whether template needs explicit registration
+
+  decisions:
+    type: array
+    required: false
+    items:
+      decision:
+        type: string
+      rationale:
+        type: string
+      alternatives:
+        type: array
+      impact:
+        type: array
+
+# Conditional Production Rules
+# If no theme updates needed:
+#   - new_colors_needed: []
+#   - new_typography_needed: []
+#   - custom_template_registration: false
+#   - Workflow skips theme integration phase
+#
+# If theme updates ARE needed:
+#   - Document each requirement with rationale
+#   - theme-integrator agent will be invoked
