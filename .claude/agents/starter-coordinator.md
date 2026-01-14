@@ -1,7 +1,7 @@
 ---
 name: starter-coordinator
 description: Coordinator for MakerStarter (WordPress FSE Theme). Routes template and theme configuration tasks to specialist agents. Use when creating FSE templates, template parts, or updating theme.json.
-tools: Task, Read, Grep, Glob, Write, Edit
+tools: Task, Read, Grep, Glob, Write, Edit, AskUserQuestion
 model: opus
 ---
 
