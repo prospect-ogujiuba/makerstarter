@@ -1,131 +1,149 @@
 # Coding Conventions
 
-**Analysis Date:** 2026-01-06
+**Analysis Date:** 2026-01-19
 
 ## Naming Patterns
 
 **Files:**
-- PHP includes: snake_case (`maker_starter_setup.php`, `enqueue_assets.php`)
-- JavaScript classes: PascalCase (`MakerStarter.js`)
-- JavaScript entry: lowercase (`index.js`)
-- SCSS partials: underscore prefix + kebab-case (`_variables.scss`, `_index.scss`)
-- Templates: kebab-case (`front-page.html`, `page-services.html`)
+- PHP: snake_case (`enqueue_assets.php`, `maker_starter_setup.php`)
+- JavaScript: PascalCase for classes (`MakerStarter.js`), camelCase for entry (`index.js`)
+- SCSS: underscore prefix for partials (`_variables.scss`, `_mixins.scss`)
+- Templates: lowercase (`index.html`)
 
-**Functions:**
-- PHP: snake_case with theme prefix `makerstarter_*`
-  - Examples: `makerstarter_setup()`, `makerstarter_enqueue_assets()`
-- JavaScript: camelCase for methods (`constructor()`, `init()`)
+**Functions (PHP):**
+- Prefixed with theme name: `makerstarter_*`
+- Examples: `makerstarter_setup()`, `makerstarter_enqueue_assets()`
+- Exception: TGMPA callbacks use `my_theme_*` prefix
 
-**Variables:**
-- PHP: snake_case (`$theme_uri`, `$script_version`, `$style_version`)
-- JavaScript: camelCase (standard ES6 conventions)
+**Variables (PHP):**
+- Global vars: snake_case (`$theme_path`, `$theme_uri`, `$script_version`)
 
-**Types:**
-- PHP: No type hinting used (PHP 7.4 compatible)
-- JavaScript: No TypeScript (vanilla ES6)
+**Classes (JS):**
+- PascalCase: `MakerStarter`
+
+**SCSS Variables:**
+- Kebab-case (standard): `$primary-color`, `$breakpoint-md`
 
 ## Code Style
 
 **Formatting:**
-- Indentation: 2 spaces (soft spaces, not tabs) across PHP, JS, SCSS
-- Line length: No enforced limit
-- Quotes:
-  - PHP: Single quotes preferred (`'makerstarter'`), double only when needed
-  - JavaScript: Double quotes (`"MakerStarter Theme Script initialized"`)
-- Semicolons: Required in PHP and JavaScript
+- No dedicated formatter configured
+- PHP: 2-space indentation
+- JS: 2-space indentation
+- SCSS: 2-space indentation
 
 **Linting:**
-- No ESLint configuration
-- No Prettier configuration
-- No Stylelint for SCSS
-- Implicit WordPress coding standards via @wordpress/scripts
+- No ESLint, Prettier, or PHP_CodeSniffer configured
+- Relies on @wordpress/scripts defaults
 
 ## Import Organization
 
-**PHP:**
-- Include pattern: Array-based loader in `functions.php`
-- Order: Defined by array order in `$includes`
-- Files loaded from `/inc` directory only
-
 **JavaScript:**
-- ES6 modules: `import`/`export` syntax
-- Pattern: `src/index.js` imports from `src/scripts/MakerStarter.js`
-- No path aliases configured
+1. Relative imports from `./scripts/` directory
+2. Instantiate at module level
+
+```javascript
+import MakerStarter from "./scripts/MakerStarter";
+new MakerStarter();
+```
 
 **SCSS:**
-- Modern `@use` and `@forward` syntax (not `@import`)
-- Pattern: Main file uses `@use` → subdirectories use `@forward` in `_index.scss`
-- Barrel exports: Each subdirectory has `_index.scss` that forwards all partials
+1. Abstracts (no underscore in @use)
+2. Base
+3. Layout
+4. Pages
+5. Components
+
+```scss
+@use "abstracts";
+@use "base";
+@use "layout";
+@use "pages";
+@use "components";
+```
+
+**PHP:**
+- Array-driven includes in `functions.php`
+- Order: setup → variables → config → plugins → assets
 
 ## Error Handling
 
 **Patterns:**
-- No try/catch blocks in theme code
-- No custom error handling
-- Relies on WordPress default error handling
-
-**Error Types:**
-- WordPress hooks handle missing functions gracefully
-- Missing asset files fail silently (WordPress behavior)
-
-**Logging:**
-- PHP: No error_log calls
-- JavaScript: console.log for initialization (`src/scripts/MakerStarter.js`)
+- Minimal error handling observed
+- PHP relies on WordPress hooks (fail silently)
+- No try/catch in JavaScript
 
 ## Logging
 
-**Framework:**
-- console.log - JavaScript only
-- No PHP logging framework
+**Framework:** Browser console
 
 **Patterns:**
-- Single console.log in MakerStarter init: `console.log("MakerStarter Theme Script initialized");`
-- No structured logging
-- No log levels
+- Development logging via `console.log()` in JS classes
+- No structured logging in PHP
 
 ## Comments
 
 **When to Comment:**
-- Per CLAUDE.md: "Do not add comments to code"
-- File-level docblocks with @package tag in PHP
-- No inline comments
+- File headers with `@package` docblock
+- Section comments (e.g., `// REQUIRED PLUGINS`)
 
-**JSDoc/TSDoc:**
-- Not used
-
-**TODO Comments:**
-- No TODO comments in theme code (some in vendor/carbon-fields)
+**PHP Docblocks:**
+```php
+/**
+ * Description.
+ *
+ * @package makerstarter
+ */
+```
 
 ## Function Design
 
-**Size:**
-- Small functions (most under 20 lines)
-- `makerstarter_setup()` is largest at ~30 lines
+**Size:** Small, single-purpose functions
 
-**Parameters:**
-- PHP: Follows WordPress hook signature patterns (no params or ($arg) patterns)
-- JavaScript: Single class with no-arg methods
+**Parameters:** Minimal, use globals for shared state
 
-**Return Values:**
-- PHP: Void functions (WordPress hook handlers)
-- JavaScript: MakerStarter class returns undefined from init()
+**Return Values:** Void for hooks, implicit returns
 
 ## Module Design
 
-**Exports:**
-- PHP: No explicit exports (functions available globally after include)
-- JavaScript: ES6 default export (`export default MakerStarter;`)
-- SCSS: `@forward` for barrel exports, no default exports
+**PHP Exports:**
+- Functions registered via WordPress hooks
+- No class-based architecture
 
-**Barrel Files:**
-- SCSS only: `_index.scss` in each subdirectory
-- Pattern: `@forward '../path/to/partial';`
+**JS Exports:**
+- ES6 default export for classes
+- Single class per file
 
-**PHP Include System:**
-- Array-based: `$includes` array in `functions.php`
-- Pattern: `foreach` → `include(get_theme_file_path('/inc/' . $include . '.php'));`
+**SCSS Barrel Files:**
+- `_index.scss` uses `@forward` to expose partials
+- Each layer has its own barrel file
+
+## WordPress-Specific Conventions
+
+**Hook Registration:**
+```php
+function makerstarter_function_name() {
+    // Implementation
+}
+add_action('hook_name', 'makerstarter_function_name');
+```
+
+**Asset Registration:**
+```php
+wp_register_script('handle', $url, $deps, $version, $in_footer);
+wp_enqueue_script('handle');
+```
+
+**Global Variables Pattern:**
+- Define in `inc/variables.php`
+- Access via `global $var_name;`
+
+## Template Conventions
+
+**FSE Templates:**
+- Block markup only, no PHP
+- Single block reference typical: `<!-- wp:namespace/block /-->`
 
 ---
 
-*Convention analysis: 2026-01-06*
-*Update when patterns change*
+*Convention analysis: 2026-01-19*

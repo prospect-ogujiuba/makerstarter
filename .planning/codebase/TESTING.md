@@ -1,141 +1,103 @@
 # Testing Patterns
 
-**Analysis Date:** 2026-01-06
+**Analysis Date:** 2026-01-19
 
 ## Test Framework
 
 **Runner:**
 - None configured
-- Test script in `package.json`: `echo "Error: no test specified" && exit 1`
 
 **Assertion Library:**
 - None
 
 **Run Commands:**
 ```bash
-npm test                       # Outputs error message
+npm run test  # Exits with error: "no test specified"
 ```
 
 ## Test File Organization
 
 **Location:**
 - No test files exist
-- No `__tests__/` directories
-- No `*.test.{js,ts,jsx,tsx}` files
-- No `*.spec.{js,ts,jsx,tsx}` files
 
 **Naming:**
-- Not applicable
+- Not established
 
 **Structure:**
-```
-No test directory structure
-```
+- Not established
 
 ## Test Structure
 
 **Suite Organization:**
-Not applicable - no testing framework
+- Not applicable
 
 **Patterns:**
-- None
+- Not established
 
 ## Mocking
 
-**Framework:**
-- None
+**Framework:** None
 
 **Patterns:**
-Not applicable
+- Not established
 
 **What to Mock:**
-Not applicable
+- N/A
 
 **What NOT to Mock:**
-Not applicable
+- N/A
 
 ## Fixtures and Factories
 
 **Test Data:**
-Not applicable
+- None
 
 **Location:**
-Not applicable
+- Not established
 
 ## Coverage
 
-**Requirements:**
-- No coverage tracking
-- No coverage tools configured
-
-**Configuration:**
-- None
+**Requirements:** None enforced
 
 **View Coverage:**
-Not applicable
+```bash
+# Not configured
+```
 
 ## Test Types
 
 **Unit Tests:**
-- None
+- Not implemented
 
 **Integration Tests:**
-- None
+- Not implemented
 
 **E2E Tests:**
-- None
+- Not implemented
 
-## Common Patterns
+## Recommended Setup
 
-**Current Testing Approach:**
-- Manual testing only
-- Build verification via running `npm run dev` or `npm run prod`
-- Visual inspection of output in browser
+If implementing tests, consider:
 
-**Build Verification:**
-- Development: `npm run dev` - Watch mode to verify compilation
-- Production: `npm run prod` - Build and check for errors
-- Preview: `npm run preview` - BrowserSync live reload
+**JavaScript (Vitest or Jest via @wordpress/scripts):**
+```bash
+npm run test:unit  # @wordpress/scripts includes jest
+```
 
-**WordPress Testing:**
-- No PHPUnit configuration
-- No WordPress test utilities
-- Theme activation tested manually in WordPress admin
+**PHP (PHPUnit with WordPress test framework):**
+- Install via Composer: `phpunit/phpunit`
+- Use WP mock library: `10up/wp_mock`
 
-## Potential Testing Setup (Recommendations)
+## Available Tooling
 
-**JavaScript Testing:**
-- Could use Jest or Vitest (WordPress Scripts includes Jest by default)
-- Test MakerStarter class initialization
-- Test asset compilation pipeline
+**@wordpress/scripts:**
+- Includes Jest configuration
+- Could enable with `"test": "wp-scripts test-unit-js"` in package.json
 
-**PHP Testing:**
-- Could use PHPUnit
-- Test theme setup hooks
-- Test asset enqueueing logic
-- Test global variable initialization
-
-**SCSS Testing:**
-- Could use Sass compilation verification
-- Test that all `@use` and `@forward` statements resolve
-
-**Template Testing:**
-- Could validate block markup syntax
-- Test that all templates use valid block names
-
-## Dependencies for Testing (if implemented)
-
-**Not Currently Installed:**
-- Jest / Vitest
-- PHPUnit
-- WordPress test utilities
-- Sass testing tools
-
-**Available via @wordpress/scripts:**
-- Jest (bundled but not configured)
-- ESLint (bundled but not configured with custom rules)
+**Manual Testing:**
+- BrowserSync configured for live preview
+- `npm run preview` proxies `local.test`
 
 ---
 
-*Testing analysis: 2026-01-06*
-*Update when test patterns change*
+*Testing analysis: 2026-01-19*

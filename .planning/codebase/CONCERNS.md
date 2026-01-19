@@ -1,164 +1,157 @@
 # Codebase Concerns
 
-**Analysis Date:** 2026-01-06
+**Analysis Date:** 2026-01-19
 
 ## Tech Debt
 
-**Empty/Uncompiled Asset Files:**
-- Issue: Build step never completed - CSS file is 2 bytes (empty), admin assets missing
-- Files: `assets/css/styles.css`, `assets/admin/styles-wp-admin.css`, `assets/admin/index-wp-admin.js`
-- Why: Build scripts exist but were not run during development
-- Impact: Theme completely unstyled, admin features broken
-- Fix approach: Run `npm run prod` to rebuild all assets
+**Empty SCSS Files:**
+- Issue: All base and abstract SCSS files are empty placeholders
+- Files: `src/styles/base/_base.scss`, `src/styles/base/_fonts.scss`, `src/styles/base/_helpers.scss`, `src/styles/base/_typography.scss`, `src/styles/abstracts/_variables.scss`, `src/styles/abstracts/_colors.scss`, `src/styles/abstracts/_breakpoints.scss`, `src/styles/abstracts/_mixins.scss`, `src/styles/abstracts/_functions.scss`, `src/styles/abstracts/_utility.scss`
+- Impact: No actual styles compiled; build runs but produces empty output
+- Fix approach: Implement base styles or remove unused forwards
 
-**Carbon Fields Integration Disabled:**
-- Issue: Carbon Fields framework installed via Composer but not loaded
-- Files: `inc/carbon_fields.php` (entire file unused), `functions.php` (line 10 commented)
-- Why: Feature was disabled during development
-- Impact: Dead code adds 13MB to vendor/, potential confusion about theme capabilities
-- Fix approach: Either remove Carbon Fields from composer.json or enable in functions.php
+**Empty Layout/Pages/Components SCSS:**
+- Issue: Layer index files have only commented-out forwards
+- Files: `src/styles/layout/_index.scss`, `src/styles/pages/_index.scss`, `src/styles/components/_index.scss`
+- Impact: SCSS architecture exists but no implementation
+- Fix approach: Uncomment and create referenced partials as needed
 
-**Duplicate Asset Enqueuing:**
-- Issue: Same assets registered twice with identical handles in frontend and editor functions
-- Files: `inc/enqueue_assets.php` (lines 15-19 duplicate lines 29-33)
-- Why: Copy-paste pattern without refactoring
-- Impact: WordPress may only load one registration, leaving editor without assets
-- Fix approach: Use unique handles or refactor to single registration function
+**Stub JavaScript:**
+- Issue: MakerStarter class only logs initialization message
+- Files: `src/scripts/MakerStarter.js`
+- Impact: No frontend functionality; script loaded but does nothing useful
+- Fix approach: Remove or implement actual functionality
 
-**Empty Function Implementations:**
-- Issue: `remove_admin_menu_items()` defined but entire function body commented out
-- Files: `inc/menu_config.php` (lines 11-20 commented, hook still registered line 22)
-- Why: Feature disabled but hook registration left in place
-- Impact: Dead code, wasted hook execution on every admin page load
-- Fix approach: Either implement menu removal or delete file and remove from includes array
+**Empty Admin Assets:**
+- Issue: Admin JS/CSS files are empty/whitespace only
+- Files: `assets/admin/index-wp-admin.js` (empty), `assets/admin/styles-wp-admin.css` (0 bytes)
+- Impact: Admin scripts enqueued but serve no purpose
+- Fix approach: Remove enqueueing in `inc/enqueue_assets.php` or implement
 
-**Empty Required Plugins Array:**
-- Issue: TGM Plugin Activation integrated but `$plugins` array is empty
-- Files: `inc/required_plugins.php` (lines 16-21 empty array), `class-tgm-plugin-activation.php` (139KB)
-- Why: Infrastructure added for future use but not configured
-- Impact: 139KB library loaded for no purpose
-- Fix approach: Add makerblocks to required plugins or remove TGM integration
+**Unused TGMPA:**
+- Issue: 3962-line TGMPA library included but no plugins defined
+- Files: `class-tgm-plugin-activation.php`, `inc/required_plugins.php`
+- Impact: Large unused dependency; empty plugins array
+- Fix approach: Remove TGMPA entirely or define required plugins
+
+**Dead Code in menu_config.php:**
+- Issue: Function with all lines commented out
+- Files: `inc/menu_config.php`
+- Impact: Empty function hooked to admin_menu; no actual effect
+- Fix approach: Remove file or implement functionality
+
+**Commented Carbon Fields Include:**
+- Issue: Carbon Fields reference in functions.php commented out, no composer.json for it
+- Files: `functions.php` line 10
+- Impact: Documentation references Carbon Fields but it's not actually set up
+- Fix approach: Remove reference or properly set up Carbon Fields
 
 ## Known Bugs
 
-**Missing Error Handling for filemtime():**
-- Symptoms: If asset files don't exist, filemtime() returns false, breaks cache busting
-- Trigger: Delete `assets/js/index.js` or `assets/css/styles.css`, load theme
-- Files: `inc/variables.php` (lines 12-13)
-- Workaround: None - will cause undefined behavior in asset versioning
-- Root cause: No file_exists() check before calling filemtime()
-- Fix: Wrap with `file_exists()` check and fallback to '1.0.0'
+**Variable Package Name Mismatch:**
+- Symptoms: PHPDoc says `@package makerblocks` but theme is `makerstarter`
+- Files: `inc/variables.php` line 6
+- Trigger: Package name inconsistency
+- Workaround: Cosmetic only; no functional impact
 
-**Hardcoded Environment URL in Templates:**
-- Symptoms: Templates contain hardcoded `http://b2bcnc.test/` URLs
-- Trigger: Deploy to different domain (staging, production)
-- Files: `templates/front-page.html` (lines 3, 7, 11 - media URLs)
-- Workaround: Find/replace domain before deployment
-- Root cause: Absolute URLs saved from block editor instead of relative
-- Fix: Use relative URLs or WordPress media functions
-
-**Undefined Constant in Commented Code:**
-- Symptoms: If Carbon Fields re-enabled, fatal error on `MAKERSTARTER_PLUGIN_DIR`
-- Trigger: Uncomment line 10 in `functions.php`
-- Files: `inc/carbon_fields.php` (line 32)
-- Root cause: Constant never defined (likely copy-paste from plugin code)
-- Fix: Define constant or use `get_theme_file_path()` instead
+**Domain Path Mismatch:**
+- Symptoms: style.css declares `/assets/lang`, code uses `/languages`
+- Files: `style.css` line 10, `inc/maker_starter_setup.php` line 11
+- Trigger: i18n loading may fail if translations exist
+- Workaround: None needed if no translations
 
 ## Security Considerations
 
-**No Security Concerns Detected:**
-- No eval, extract, or unserialize calls
-- No direct $_GET, $_POST, $_REQUEST usage
-- No hardcoded secrets or API keys
-- Theme follows WordPress security best practices (uses native functions)
+**No Input Sanitization Patterns:**
+- Risk: No esc_*, sanitize_*, or nonce functions found in inc/ files
+- Files: All files in `inc/`
+- Current mitigation: No user input currently handled
+- Recommendations: Establish sanitization patterns before accepting any input
+
+**Global Variables:**
+- Risk: Theme uses globals ($theme_uri, $script_version, etc.) which can be overwritten
+- Files: `inc/variables.php`, `inc/enqueue_assets.php`
+- Current mitigation: WordPress environment provides some isolation
+- Recommendations: Use a theme class or namespaced functions instead of globals
 
 ## Performance Bottlenecks
 
-**Large Vendor Directory (13MB):**
-- Problem: Carbon Fields installed but not used
-- Measurement: `du -sh vendor/` = 13MB
-- Files: `vendor/htmlburger/carbon-fields/`
-- Cause: Composer dependency included but feature disabled
-- Improvement path: Remove from composer.json if not needed, run `composer install --no-dev` for production
+**Unnecessary Script Loading:**
+- Problem: Empty/stub scripts loaded on every page
+- Files: `inc/enqueue_assets.php`
+- Cause: `makerstarter-admin-scripts`, `makerstarter-scripts` enqueued regardless of content
+- Improvement path: Conditional loading or remove empty assets
 
-**No Asset Minification Verification:**
-- Problem: Build process exists but output not verified for minification
-- Files: `assets/css/styles.css` (currently empty)
-- Cause: Build step not run during development
-- Improvement path: Add pre-deployment checks to verify assets built with production flags
+**wp-element Dependency:**
+- Problem: Theme JS depends on `wp-element` but doesn't use React
+- Files: `inc/enqueue_assets.php` line 15
+- Cause: Possibly leftover from template
+- Improvement path: Remove dependency if React unused
 
 ## Fragile Areas
 
-**Global Variable Dependency:**
-- Files: `inc/variables.php` (defines globals), `inc/enqueue_assets.php` (uses globals)
-- Why fragile: Load order matters - if variables.php not loaded first, undefined variables
-- Common failures: If include order changes in functions.php, enqueueing breaks
-- Safe modification: Always keep 'variables' before 'enqueue_assets' in $includes array
+**Hard-coded Asset Paths:**
+- Files: `inc/enqueue_assets.php`
+- Why fragile: filemtime() will error if asset files don't exist
+- Safe modification: Add file_exists() checks
 - Test coverage: None
 
-**Asset Compilation Pipeline:**
-- Files: `package.json` (build scripts), `src/` directory
-- Why fragile: Multi-step build (Sass + wp-scripts) must both succeed
-- Common failures: Sass compilation errors fail silently, leaving empty CSS
-- Safe modification: Run `npm run dev` in watch mode during development
-- Test coverage: None
-
-**Include Array Loading System:**
-- Files: `functions.php` (lines 6-11)
-- Why fragile: Order-dependent, no error handling for missing files
-- Common failures: Typo in filename causes silent failure (include() vs require())
-- Safe modification: Use require() instead of include() for critical files
+**Template Dependency on makerblocks:**
+- Files: `templates/index.html`
+- Why fragile: Single template uses `wp:makerblocks/app` block from external plugin
+- Safe modification: Ensure makerblocks plugin installed; add fallback
 - Test coverage: None
 
 ## Scaling Limits
 
-**Not Applicable:**
-- Theme is presentation layer only
-- No database queries or API calls
-- Scaling handled by WordPress core and makerblocks plugin
+**Single Template:**
+- Current capacity: Only index.html template exists
+- Limit: Cannot create distinct page layouts without makerblocks
+- Scaling path: Add templates (page.html, single.html, archive.html, etc.)
+
+**No Template Parts:**
+- Current capacity: No reusable header/footer/sidebar parts
+- Limit: Duplication if multiple templates created
+- Scaling path: Create `parts/` directory with common elements
 
 ## Dependencies at Risk
 
-**No package.json semver ranges:**
-- Risk: Dependencies locked to exact versions (^30.19.0 uses caret, acceptable)
-- Impact: Minor - npm will install compatible versions
-- Migration plan: Use `npm update` periodically to stay current
+**TGMPA Library:**
+- Risk: Bundled version (v2.6.1) may become outdated; known hacks documented in file
+- Impact: Plugin management functionality if used
+- Migration plan: Update periodically or switch to Composer-managed dependency
+
+**makerblocks Plugin:**
+- Risk: Theme completely dependent on external plugin for rendering
+- Impact: Theme renders nothing useful without it
+- Migration plan: Add fallback templates that work without plugin
 
 ## Missing Critical Features
 
-**No Template Parts:**
-- Problem: No reusable template fragments (header, footer duplicated across templates)
-- Current workaround: Blocks handle header/footer (`<!-- wp:makerblocks/header /-->`)
-- Blocks: Can't easily update global header/footer without editing all templates
-- Implementation complexity: Low (create `parts/` directory, extract header/footer blocks)
+**No Block Templates:**
+- Problem: Missing standard FSE templates
+- Blocks: page.html, single.html, archive.html, 404.html, search.html, header.html, footer.html
 
-**No Build Verification:**
-- Problem: No automated check that assets compiled successfully
-- Current workaround: Visual inspection in browser
-- Blocks: Can't catch build failures before deployment
-- Implementation complexity: Low (add `test` script that checks asset file sizes)
+**No Block Patterns:**
+- Problem: Core patterns disabled but no custom patterns registered
+- Blocks: Pattern registration in `inc/`
 
-**No .gitignore for Build Artifacts:**
-- Problem: Compiled assets committed to repo instead of built during deployment
-- Current workaround: Manual builds before commit
-- Blocks: Larger repo size, merge conflicts on compiled files
-- Implementation complexity: Low (add assets/ to .gitignore, add build step to deploy)
+**No Theme Styles:**
+- Problem: theme.json has empty palette/gradients/typography settings
+- Blocks: Users cannot customize via Site Editor
+
+**No Languages Directory:**
+- Problem: i18n configured but /languages/ doesn't exist
+- Blocks: Translations cannot be loaded
 
 ## Test Coverage Gaps
 
-**No Testing Infrastructure:**
-- What's not tested: Everything (PHP setup, asset enqueueing, JavaScript, SCSS compilation)
-- Risk: Any change could break theme without detection
-- Priority: Medium (small theme, manual testing sufficient for now)
-- Difficulty to test: Low (WordPress provides test utilities, Jest already bundled)
-
-**Build Pipeline Not Verified:**
-- What's not tested: Sass compilation success, JavaScript bundling, asset file existence
-- Risk: Silent build failures deploy broken theme
-- Priority: High (currently CSS is empty - this exact issue exists)
-- Difficulty to test: Low (simple file existence and size checks)
+**No Test Infrastructure:**
+- What's not tested: Everything
+- Files: All PHP and JS
+- Risk: Regressions undetected
+- Priority: Low for starter theme; establish before adding complexity
 
 ---
 
-*Concerns audit: 2026-01-06*
-*Update as issues are fixed or new ones discovered*
+*Concerns audit: 2026-01-19*

@@ -1,79 +1,96 @@
 # Technology Stack
 
-**Analysis Date:** 2026-01-06
+**Analysis Date:** 2026-01-19
 
 ## Languages
 
 **Primary:**
-- PHP 7.4+ - `style.css` (all theme logic and setup)
-- JavaScript ES6+ - `src/index.js`, `src/scripts/MakerStarter.js` (frontend interactivity)
+- PHP 7.4+ - Theme logic, WordPress hooks (`functions.php`, `inc/*.php`)
+- JavaScript ES6+ - Frontend scripts (`src/scripts/*.js`)
+- Sass/SCSS - Stylesheets (`src/styles/**/*.scss`)
 
 **Secondary:**
-- SCSS (Sass) - `src/styles/styles.scss` (styling system)
-- HTML - `templates/*.html` (FSE block templates)
+- HTML - Block templates (`templates/*.html`)
+- JSON - Configuration (`theme.json`, `package.json`)
 
 ## Runtime
 
 **Environment:**
-- WordPress 6.2+ (tested up to 6.5.4) - `style.css`
-- PHP 7.4+ - `style.css`
-- Node.js (via npm) - `package.json`
+- WordPress 6.2+ (Full Site Editing required)
+- PHP 7.4+ (per `style.css` declaration)
+- Node.js (for build tools, version not pinned)
 
 **Package Manager:**
-- npm 10.x - `package.json`, `package-lock.json` (v3 lockfile)
-- Composer - `composer.json` (PHP dependencies)
+- npm (lockfile: `package-lock.json` present)
+- Composer (autoload present in `vendor/`, no `composer.json` committed)
 
 ## Frameworks
 
 **Core:**
-- WordPress Full Site Editing (FSE) - `theme.json` (v3 schema)
-- WordPress Block Editor - `templates/*.html`
+- WordPress FSE - Block-based theme architecture
+- WordPress Block API - Template composition via block markup
 
 **Testing:**
-- None currently configured - `package.json` (test script placeholder)
+- None configured (`npm test` echoes error)
 
 **Build/Dev:**
-- @wordpress/scripts 30.19.0 - `package.json` (webpack bundling for WordPress)
-- Sass 1.89.2 - `package.json` (SCSS compilation)
-- npm-run-all 4.1.5 - `package.json` (parallel script execution)
-- BrowserSync - `package.json` (live preview on local.test)
+- @wordpress/scripts ^30.19.0 - JS bundling (`wp-scripts build/start`)
+- sass ^1.89.2 - SCSS compilation
+- npm-run-all ^4.1.5 - Parallel/sequential script runner
+- browser-sync - Live reload (via `npm run preview`)
 
 ## Key Dependencies
 
 **Critical:**
-- wp-element - `assets/js/index.asset.php` (React compatibility for blocks)
-- Carbon Fields 3.6+ - `composer.json` (custom fields framework, currently disabled)
+- @wordpress/scripts - Provides webpack config, React dependencies, build tooling
+- htmlburger/carbon-fields v3.6.3 - Custom fields library (Composer, currently commented out in `functions.php`)
 
 **Infrastructure:**
-- WordPress native hooks and filters - `inc/*.php`
-- TGM Plugin Activation 2.6+ - `class-tgm-plugin-activation.php`
+- wp-element - React wrapper (dependency of compiled JS per `inc/enqueue_assets.php`)
+- TGM Plugin Activation - Required plugins management (`class-tgm-plugin-activation.php`)
 
 ## Configuration
 
 **Environment:**
-- No .env files detected
-- Configuration via theme.json for FSE settings - `theme.json`
-- Hardcoded domain for BrowserSync: local.test - `package.json`
+- No `.env` files - WordPress handles configuration via `wp-config.php`
+- No runtime-specific configs
 
 **Build:**
-- Build scripts in package.json: dev (watch), prod (minified)
-- Sass compilation: `src/styles/` → `assets/css/styles.css`
-- JS bundling: `src/` → `assets/js/index.js`
-- Asset versioning via filemtime() - `inc/variables.php`
+- `package.json` - npm scripts for dev/prod builds
+- `theme.json` - WordPress FSE settings (layout, colors, typography, blocks)
+
+**WordPress FSE Settings (`theme.json`):**
+- Schema version 3
+- Content width: 800px, Wide: 1100px
+- Core block patterns disabled
+- Image lightbox enabled
 
 ## Platform Requirements
 
 **Development:**
-- Any platform with Node.js and PHP 7.4+
-- WordPress 6.2+ local installation
-- No Docker or additional tooling required
+- Node.js + npm
+- Local WordPress installation (proxy expects `local.test`)
+- PHP 7.4+
 
 **Production:**
-- WordPress 6.2+ hosting
-- PHP 7.4+ runtime
-- Standard WordPress theme structure
+- WordPress 6.2+ with FSE support
+- PHP 7.4+
+- No special server requirements
+
+## Build Commands
+
+```bash
+npm run dev      # Watch: JS (wp-scripts start) + Sass (watch mode)
+npm run prod     # Production: Sass compressed + JS build
+npm run preview  # BrowserSync proxy on local.test
+```
+
+## Asset Output
+
+- JS: `src/index.js` → `assets/js/index.js`
+- CSS: `src/styles/styles.scss` → `assets/css/styles.css`
+- Admin assets expected at `assets/admin/` (referenced but may not exist)
 
 ---
 
-*Stack analysis: 2026-01-06*
-*Update after major dependency changes*
+*Stack analysis: 2026-01-19*
