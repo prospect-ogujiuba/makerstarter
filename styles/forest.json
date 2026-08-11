@@ -1,0 +1,11 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/theme.json",
+  "version": 3,
+  "title": "Forest",
+  "settings": { "color": { "palette": [
+    { "slug": "canvas", "name": "Canvas", "color": "#eef3ec" }, { "slug": "surface", "name": "Surface", "color": "#fbfdf9" },
+    { "slug": "ink", "name": "Ink", "color": "#14251b" }, { "slug": "muted", "name": "Muted", "color": "#516358" },
+    { "slug": "accent", "name": "Accent", "color": "#28603d" }, { "slug": "highlight", "name": "Highlight", "color": "#d6eadb" },
+    { "slug": "border", "name": "Border", "color": "#cbd8cd" }
+  ] } }
+}

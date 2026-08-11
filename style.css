@@ -1,0 +1,14 @@
+/*
+Theme Name: MakerStarter
+Theme URI: https://github.com/prospect-ogujiuba/makerstarter
+Author: Maker
+Description: A neutral professional full-site-editing foundation for MakerBlocks.
+Version: 0.1.0
+Requires at least: 6.8
+Requires PHP: 8.2
+License: GNU General Public License v2 or later
+Text Domain: makerstarter
+*/
+
+:where(.wp-site-blocks) { min-height: 100vh; }
+:where(a) { text-underline-offset: .18em; }
