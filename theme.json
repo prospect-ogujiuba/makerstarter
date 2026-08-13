@@ -33,7 +33,11 @@
         { "slug": "large", "name": "Large", "size": "1.25rem" }, { "slug": "x-large", "name": "Extra Large", "size": "clamp(2.4rem, 6vw, 5.5rem)" }
       ]
     },
-    "custom": { "radius": { "medium": "1rem", "large": "1.5rem" } }
+    "custom": {
+      "radius": { "small": ".5rem", "medium": "1rem", "large": "1.5rem", "pill": "999px" },
+      "focus": { "color": "var(--wp--preset--color--accent)", "offset": "3px", "width": "2px" },
+      "layout": { "content": "720px", "wide": "1200px" }
+    }
   },
   "styles": {
     "color": { "background": "var(--wp--preset--color--canvas)", "text": "var(--wp--preset--color--ink)" },

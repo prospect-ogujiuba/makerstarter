@@ -12,3 +12,7 @@ Text Domain: makerstarter
 
 :where(.wp-site-blocks) { min-height: 100vh; }
 :where(a) { text-underline-offset: .18em; }
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+	outline: var(--wp--custom--focus--width, 2px) solid var(--wp--custom--focus--color, currentColor);
+	outline-offset: var(--wp--custom--focus--offset, 3px);
+}
