@@ -1,5 +1,7 @@
 import assert from 'node:assert/strict';
 import { readFileSync, readdirSync } from 'node:fs';
+import { spawnSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
 import test from 'node:test';
 
 const root = new URL( '../', import.meta.url );
@@ -52,6 +54,36 @@ test( 'theme setup is broad and runtime-free', () => {
     assert.match( functions, /load_theme_textdomain\( 'makerstarter'/ );
     assert.doesNotMatch( functions, /wp_enqueue_script|tgmpa|plugin-install/i );
     assert.equal( readdirSync( root ).some( ( name ) => /^(src|assets|scripts|tailwind\.config)/i.test( name ) ), false );
+} );
+
+test( 'declares the replaceable parent and child-theme boundary', () => {
+    const boundary = read( 'CORE-BOUNDARY.md' );
+    const readme = read( 'README.md' );
+    const stylesheet = read( 'style.css' );
+
+    assert.match( boundary, /Every tracked file beneath `wp-content\/themes\/makerstarter\/` is core-owned/ );
+    assert.match( boundary, /`themes\/<site>-theme\/`/ );
+    assert.match( readme, /Template: makerstarter/ );
+    assert.match( stylesheet, /Requires at least:\s+6\.8/ );
+    assert.match( stylesheet, /Requires PHP:\s+8\.2/ );
+} );
+
+test( 'boots and registers standard hooks without a child workspace', () => {
+    const entry = fileURLToPath( new URL( '../functions.php', import.meta.url ) );
+    const script = `
+        define( 'ABSPATH', __DIR__ );
+        $hooks = [];
+        function add_action( $hook, $callback, $priority = 10 ) {
+            global $hooks;
+            $hooks[$hook] = [$callback, $priority];
+        }
+        require ${ JSON.stringify( entry ) };
+        echo implode( ',', array_keys( $hooks ) );
+    `;
+    const result = spawnSync( 'php', [ '-r', script ], { encoding: 'utf8' } );
+
+    assert.equal( result.status, 0, result.stderr );
+    assert.equal( result.stdout, 'after_setup_theme,init' );
 } );
 
 test( 'MakerBlocks patterns include semantic saved fallbacks', () => {

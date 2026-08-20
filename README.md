@@ -4,6 +4,19 @@ A WordPress 6.8+ full-site-editing theme and neutral design system. PHP 8.2+ is 
 
 The templates and header/footer use only WordPress core blocks, so the site shell remains usable without companion plugins. MakerBlocks patterns are optional examples; their saved markup is semantic and useful before React loads or when JavaScript is unavailable. MakerStarter does not install plugins, brand pages, or ship a frontend runtime.
 
+## Site workspace
+
+Treat `wp-content/themes/makerstarter/` as replaceable core. Put branding, composition, templates, template parts, patterns, assets, and project PHP in a sibling child theme at `wp-content/themes/<site>-theme/`. Its `style.css` uses the standard WordPress parent declaration:
+
+```css
+/*
+Theme Name: Example Site
+Template: makerstarter
+*/
+```
+
+Do not edit or add a `custom/` directory to this checkout. Child overrides use standard WordPress resolution; MakerStarter does not discover project files. See [CORE-BOUNDARY.md](CORE-BOUNDARY.md) for ownership and compatibility policy.
+
 ## Stable design-token contract
 
 MakerBlocks may consume these WordPress-generated CSS custom properties. Slugs are the public contract; values and style variations may change.
