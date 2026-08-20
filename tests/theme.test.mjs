@@ -61,9 +61,13 @@ test( 'declares the replaceable parent and child-theme boundary', () => {
     const readme = read( 'README.md' );
     const stylesheet = read( 'style.css' );
 
+    assert.match( boundary, /FRAMEWORK CORE — DO NOT EDIT; update from playground releases/ );
     assert.match( boundary, /Every tracked file beneath `wp-content\/themes\/makerstarter\/` is core-owned/ );
     assert.match( boundary, /`themes\/<site>-theme\/`/ );
     assert.match( readme, /Template: makerstarter/ );
+    assert.match( read( 'scaffolds/child-theme/README.md' ), /^# PROJECT OWNED — EDIT HERE/ );
+    assert.match( read( 'scaffolds/child-theme/style.css' ), /Template: makerstarter/ );
+    assert.match( read( 'scaffolds/child-theme/style.css' ), /\{\{PROJECT_SLUG\}\}-theme/ );
     assert.match( stylesheet, /Requires at least:\s+6\.8/ );
     assert.match( stylesheet, /Requires PHP:\s+8\.2/ );
 } );

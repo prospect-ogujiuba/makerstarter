@@ -1,5 +1,7 @@
 # MakerStarter core boundary
 
+**FRAMEWORK CORE — DO NOT EDIT; update from playground releases.**
+
 MakerStarter is a replaceable framework package. Every tracked file beneath `wp-content/themes/makerstarter/` is core-owned, including `theme.json`, `style.css`, `functions.php`, templates, template parts, patterns, style variations, package metadata, and tests.
 
 ## Ownership

@@ -45,4 +45,8 @@ MakerStarter explicitly provides the textdomain, document titles, feeds, post th
 - `patterns/`: a core pattern plus optional MakerBlocks examples with semantic fallbacks.
 - `styles/`: neutral global style variations that preserve token slugs.
 
+## Project child themes
+
+Do not customize this core checkout. DevArch renders the maintained `scaffolds/child-theme/` template into the sibling `themes/<site>-theme/` workspace and activates that child theme. Template tokens are creation-time inputs; existing destinations are never merged or overwritten.
+
 Run `npm test` before packaging or publishing.
