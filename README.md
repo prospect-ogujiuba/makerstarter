@@ -17,6 +17,28 @@ Template: makerstarter
 
 Do not edit or add a `custom/` directory to this checkout. Child overrides use standard WordPress resolution; MakerStarter does not discover project files. See [CORE-BOUNDARY.md](CORE-BOUNDARY.md) for ownership and compatibility policy.
 
+## Git worktree workflow
+
+The playground checkout is this repository's clean **primary worktree** and stays on `main`. For parallel core work, create a linked feature worktree outside WordPress:
+
+```bash
+git worktree add "$HOME/projects/worktrees/makerstarter/token-update" \
+  -b feat/token-update
+```
+
+Develop, test, and commit in that linked worktree. Then merge from the playground primary worktree and remove the temporary checkout:
+
+```bash
+git switch main
+git pull --ff-only
+git merge feat/token-update
+npm test
+git worktree remove "$HOME/projects/worktrees/makerstarter/token-update"
+git branch -d feat/token-update
+```
+
+A branch can be checked out in only one worktree. Use `git worktree list` to inspect active checkouts. Never use a feature worktree for site branding; that belongs in `<site>-theme`. Merge reviewed core changes to primary `main` before the Maker release flow.
+
 ## Stable design-token contract
 
 MakerBlocks may consume these WordPress-generated CSS custom properties. Slugs are the public contract; values and style variations may change.
