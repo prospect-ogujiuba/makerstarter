@@ -1,6 +1,14 @@
 /*
-Theme Name: {{SITE_TITLE}} Theme
+Theme Name: {{SITE_TITLE}}
+Theme URI: https://github.com/prospect-ogujiuba
+Description: A custom full-site editing theme for {{SITE_TITLE}}, built on the MakerStarter design system.
+Author: Maker
+Author URI: https://github.com/prospect-ogujiuba
 Template: makerstarter
 Version: 0.1.0
+Requires at least: 6.8
+Requires PHP: 8.2
+License: GNU General Public License v2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: {{PROJECT_SLUG}}-theme
 */

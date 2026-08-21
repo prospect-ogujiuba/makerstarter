@@ -66,8 +66,13 @@ test( 'declares the replaceable parent and child-theme boundary', () => {
     assert.match( boundary, /`themes\/<site>-theme\/`/ );
     assert.match( readme, /Template: makerstarter/ );
     assert.match( read( 'scaffolds/child-theme/README.md' ), /^# PROJECT OWNED — EDIT HERE/ );
-    assert.match( read( 'scaffolds/child-theme/style.css' ), /Template: makerstarter/ );
-    assert.match( read( 'scaffolds/child-theme/style.css' ), /\{\{PROJECT_SLUG\}\}-theme/ );
+    const childStylesheet = read( 'scaffolds/child-theme/style.css' );
+    assert.match( childStylesheet, /Template: makerstarter/ );
+    assert.match( childStylesheet, /\{\{PROJECT_SLUG\}\}-theme/ );
+    assert.match( childStylesheet, /Description:\s+A custom full-site editing theme for \{\{SITE_TITLE\}\}/ );
+    assert.match( childStylesheet, /Author URI:\s+https:\/\/github\.com\/prospect-ogujiuba/ );
+    assert.match( childStylesheet, /Requires at least:\s+6\.8/ );
+    assert.ok( readdirSync( new URL( 'scaffolds/child-theme/', root ) ).includes( 'screenshot.png' ) );
     assert.match( stylesheet, /Requires at least:\s+6\.8/ );
     assert.match( stylesheet, /Requires PHP:\s+8\.2/ );
 } );
