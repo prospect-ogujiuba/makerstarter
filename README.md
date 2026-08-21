@@ -1,5 +1,7 @@
 # MakerStarter
 
+![MakerStarter WordPress theme](screenshot.png)
+
 A WordPress 6.8+ full-site-editing theme and neutral design system. PHP 8.2+ is required.
 
 The templates and header/footer use only WordPress core blocks, so the site shell remains usable without companion plugins. MakerBlocks patterns are optional examples; their saved markup is semantic and useful before React loads or when JavaScript is unavailable. MakerStarter does not install plugins, brand pages, or ship a frontend runtime.
