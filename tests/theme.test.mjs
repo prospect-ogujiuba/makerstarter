@@ -100,6 +100,11 @@ test( 'MakerBlocks patterns include semantic saved fallbacks', () => {
         .filter( ( name ) => name.startsWith( 'makerblocks-' ) );
     assert.ok( patternFiles.length >= 2 );
 
+    const landing = read( 'patterns/makerblocks-landing.php' );
+    for ( const block of [ 'hero', 'logo-cloud', 'card-grid', 'stats', 'testimonial', 'pricing', 'faq', 'call-to-action' ] ) {
+        assert.match( landing, new RegExp( `<!-- wp:makerblocks/${ block }` ) );
+    }
+
     for ( const name of patternFiles ) {
         const pattern = read( `patterns/${ name }` );
         assert.match( pattern, /<!-- wp:makerblocks\// );
